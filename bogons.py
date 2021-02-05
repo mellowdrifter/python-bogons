@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+import ipaddress
 
 
-def ValidPublicASN(asn: int) -> bool:
+def valid_public_asn(asn: int) -> bool:
 
     if not isinstance(asn, int):
         return False
@@ -38,3 +39,28 @@ def ValidPublicASN(asn: int) -> bool:
 
     # asn should be int < 4200000000
     return asn < 4200000000
+
+
+def is_public_ipv4(ip: str) -> bool:
+    try:
+        ip = ipaddress.ip_address(ip)
+    except:
+        return False
+
+    if ip.is_multicast:
+        return False
+
+    return ip.is_global
+
+
+def is_public_ipv6(ip: str) -> bool:
+    try:
+        ip = ipaddress.ip_address(ip)
+    except:
+        return False
+
+    if ip.is_multicast:
+        return False
+
+# TODO: Multiple RFCs not supported here...
+    return ip.is_global
