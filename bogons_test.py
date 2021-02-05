@@ -43,13 +43,14 @@ class valid_public_asnTest(unittest.TestCase):
         self.assertEqual(bogons.is_public_ipv4("🎈"), False)
 
     def test_is_public_ipv6(self):
+        self.assertEqual(bogons.is_public_ipv6("2001:0:1:2::3"), False)
         self.assertEqual(bogons.is_public_ipv6("2001:1:2::3"), False)
         self.assertEqual(bogons.is_public_ipv6("2001:db8:1:2::3"), False)
-        # self.assertEqual(bogons.is_public_ipv6("2002:b8:1:2::3"), False)
+        self.assertEqual(bogons.is_public_ipv6("2002:b8:1:2::3"), False)
         self.assertEqual(bogons.is_public_ipv6("2600::"), True)
-        # self.assertEqual(bogons.is_public_ipv6("3ffe::"), False)
+        self.assertEqual(bogons.is_public_ipv6("3ffe::"), False)
         self.assertEqual(bogons.is_public_ipv6("3fff::"), True)
         self.assertEqual(bogons.is_public_ipv6("3fff:::"), False)
-        # self.assertEqual(bogons.is_public_ipv6("4600::"), False)
-        # self.assertEqual(bogons.is_public_ipv6(""), False)
+        self.assertEqual(bogons.is_public_ipv6("4600::"), False)
+        self.assertEqual(bogons.is_public_ipv6(""), False)
         self.assertEqual(bogons.is_public_ipv6("🎈"), False)

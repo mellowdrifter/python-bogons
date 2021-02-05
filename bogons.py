@@ -62,5 +62,15 @@ def is_public_ipv6(ip: str) -> bool:
     if ip.is_multicast:
         return False
 
-# TODO: Multiple RFCs not supported here...
+    ip_int = int(ip)
+    # 6to4 2002::/16
+    if ip_int >= 42545680458834377588178886921629466624 and ip_int <= 42550872755692912415807417417958686719:
+        return False
+    # 6bone 3ffe::/16
+    if ip_int >= 85060207136517546210586590865283612672 and ip_int <= 85065399433376081038215121361612832767:
+        return False
+    # Anything else not in 2000::/3 is not public
+    if ip_int > 85070591730234615865843651857942052863:
+        return False
+
     return ip.is_global
