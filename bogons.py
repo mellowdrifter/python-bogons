@@ -41,24 +41,28 @@ def valid_public_asn(asn: int) -> bool:
     return asn < 4200000000
 
 
-def is_public_ipv4(ip: str) -> bool:
+def is_public_ip(ip: str) -> bool:
     try:
         ip = ipaddress.ip_address(ip)
     except:
         return False
 
+    if ip.version == 4:
+        return is_public_ipv4(ip)
+    if ip.version == 6:
+        return is_public_ipv6(ip)
+
+    return False
+
+
+def is_public_ipv4(ip: ipaddress.IPv4Address) -> bool:
     if ip.is_multicast:
         return False
 
     return ip.is_global
 
 
-def is_public_ipv6(ip: str) -> bool:
-    try:
-        ip = ipaddress.ip_address(ip)
-    except:
-        return False
-
+def is_public_ipv6(ip: ipaddress.IPv4Address) -> bool:
     if ip.is_multicast:
         return False
 
