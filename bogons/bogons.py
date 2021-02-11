@@ -67,7 +67,7 @@ def is_public_ipv6(ip: ipaddress.IPv6Address) -> bool:
         return False
     
     # 6to4 address space
-    if ip in ipaddress.IPv6Network('2002::16'):
+    if ip in ipaddress.IPv6Network('2002::/16'):
         return False
     # 6bone address space
     if ip in ipaddress.IPv6Network('3ffe::16'):
