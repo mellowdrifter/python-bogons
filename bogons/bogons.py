@@ -70,7 +70,7 @@ def is_public_ipv6(ip: ipaddress.IPv6Address) -> bool:
     if ip in ipaddress.IPv6Network('2002::/16'):
         return False
     # 6bone address space
-    if ip in ipaddress.IPv6Network('3ffe::16'):
+    if ip in ipaddress.IPv6Network('3ffe::/16'):
         return False
     # Anything else not in 2000::/3 is not public
     if ip not in ipaddress.IPv6Network('2000::/3'):
