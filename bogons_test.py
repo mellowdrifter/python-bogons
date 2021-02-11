@@ -52,5 +52,5 @@ class valid_public_asnTest(unittest.TestCase):
         self.assertEqual(bogons.is_public_ip("4600::"), False)
         self.assertEqual(bogons.is_public_ip(""), False)
 
-    if __name__ == '__main__':
-        unittest.main()
+if __name__ == '__main__':
+    unittest.main()
