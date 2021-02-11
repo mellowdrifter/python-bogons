@@ -62,19 +62,18 @@ def is_public_ipv4(ip: ipaddress.IPv4Address) -> bool:
     return ip.is_global
 
 
-def is_public_ipv6(ip: ipaddress.IPv4Address) -> bool:
+def is_public_ipv6(ip: ipaddress.IPv6Address) -> bool:
     if ip.is_multicast:
         return False
-
-    ip_int = int(ip)
-    # 6to4 2002::/16
-    if ip_int >= 42545680458834377588178886921629466624 and ip_int <= 42550872755692912415807417417958686719:
+    
+    # 6to4 address space
+    if ip in ipaddress.IPv6Network('2002::16'):
         return False
-    # 6bone 3ffe::/16
-    if ip_int >= 85060207136517546210586590865283612672 and ip_int <= 85065399433376081038215121361612832767:
+    # 6bone address space
+    if ip in ipaddress.IPv6Network('3ffe::16'):
         return False
     # Anything else not in 2000::/3 is not public
-    if ip_int > 85070591730234615865843651857942052863:
+    if ip not in ipaddress.IPv6Network('2000::/3'):
         return False
 
     return ip.is_global
