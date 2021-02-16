@@ -11,10 +11,10 @@ with open(f"{here}/README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="bogons",
-    version="0.0.1",
+    version="1.0.1",
     author="Darren O'Connor",
     author_email="nouser@bgpstuff.net",
-    description="Python Libary for Bogons",
+    description="Python Libary for IP & ASN Bogons",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/mellowdrifter/python-bogons",
@@ -22,9 +22,9 @@ setuptools.setup(
     license="Apache Software License (http://www.apache.org/licenses/LICENSE-2.0)",
     classifiers=[
         "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: Apache 2.0 License",
+        "License :: OSI Approved :: Apache Software License",
         "Operating System :: OS Independent",
     ],
-    install_requires=[],
+    install_requires=['ipaddress'],
     python_requires=">=3.6",
 )
