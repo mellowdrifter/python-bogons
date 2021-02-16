@@ -15,7 +15,7 @@ This library does not filter out unassigned space. It will filter IPv4, IPv6, an
 * [RFC7300](https://tools.ietf.org/html/rfc7300)
 * [RFC7607](https://tools.ietf.org/html/rfc7607)
 
-For IPv6, 6to4, 6bone, and any prefix not in 2000::/3 is marked as invalid.
+For IPv6: 6to4, 6bone, and any prefix not in 2000::/3 is marked as invalid.
 
 
 # Install
