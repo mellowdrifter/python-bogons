@@ -38,5 +38,5 @@ True
 False
 ```
 
-# Developement
+# Development
 I welcome pull requests for updated RFCs or errors.
