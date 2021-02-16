@@ -11,7 +11,7 @@ with open(f"{here}/README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="bogons",
-    version="1.0.2",
+    version="1.0.3",
     author="Darren O'Connor",
     author_email="nouser@bgpstuff.net",
     description="Python Libary for IP & ASN Bogons",
