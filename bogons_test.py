@@ -39,8 +39,29 @@ class BogonsTestCase(unittest.TestCase):
             self.assertFalse(valid, f"check_asn({asn}) should be false")
             self.assertEqual(reason, expected_reason)
 
+        # Valid String ASNs & asdot
+        valid_str_asns = ["15169", "AS15169", "as13335", "2.0"]  # 2.0 = 131072 is public 32-bit
+        for asn_str in valid_str_asns:
+            self.assertTrue(bogons.valid_public_asn(asn_str), f"String ASN {asn_str} should be valid")
+            valid, reason = bogons.check_asn(asn_str)
+            self.assertTrue(valid, f"check_asn({asn_str}) should be true")
+            self.assertEqual(reason, "")
+
+        # Bogon String ASNs & asdot
+        bogon_str_cases = [
+            ("AS0", "RFC 6483 / RFC 7607 (Reserved ASN 0)"),
+            ("as64512", "RFC 1930 / RFC 6996 (Private-Use 16-bit)"),
+            ("AS23456", "RFC 6793 (AS_TRANS 4-Byte Transition)"),
+            ("1.0", "RFC 5398 (Documentation 32-bit)"),  # 65536
+        ]
+        for s, expected_reason in bogon_str_cases:
+            self.assertFalse(bogons.valid_public_asn(s))
+            valid, reason = bogons.check_asn(s)
+            self.assertFalse(valid)
+            self.assertEqual(reason, expected_reason)
+
         # ASN Edge Cases & Malformed Inputs
-        bad_inputs = [-1, 4294967296, "15169", None, True, False, [1]]
+        bad_inputs = [-1, 4294967296, "not-an-asn", "", "AS", "1.2.3", None, True, False, [1]]
         for val in bad_inputs:
             self.assertFalse(bogons.valid_public_asn(val))
             valid, reason = bogons.check_asn(val)

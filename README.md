@@ -79,8 +79,15 @@ valid, reason = bogons.check_asn(64512)
 print(valid, reason)
 # Output: False "RFC 1930 / RFC 6996 (Private-Use 16-bit)"
 
-bogons.valid_public_asn(15169)  # True
-bogons.valid_public_asn(64512)  # False
+# Accepts string with optional "AS" prefix or asdot notation:
+valid, reason = bogons.check_asn("AS64512")
+# Output: False "RFC 1930 / RFC 6996 (Private-Use 16-bit)"
+
+valid, reason = bogons.check_asn("1.0")
+# Output: False "RFC 5398 (Documentation 32-bit)"
+
+bogons.valid_public_asn("AS15169")  # True
+bogons.valid_public_asn("AS64512")  # False
 ```
 
 ## License

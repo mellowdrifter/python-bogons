@@ -72,26 +72,67 @@ AS_RULES: Tuple[Tuple[int, int, str], ...] = (
 )
 
 
-def check_asn(asn: int) -> Tuple[bool, str]:
+def parse_asn(asn: Union[int, str]) -> Tuple[int, str]:
+    """
+    Parses an ASN from int or str (supporting 'AS15169', '15169', '1.0' asdot).
+    Returns (asn_int, ""). On error, returns (-1, error_message).
+    """
+    if isinstance(asn, bool):
+        return -1, "ASN must be an integer or string"
+    if isinstance(asn, int):
+        if asn < 0 or asn > 4294967295:
+            return -1, "ASN out of 32-bit range (0-4294967295)"
+        return asn, ""
+
+    if isinstance(asn, str):
+        s = asn.strip()
+        if s.upper().startswith("AS"):
+            s = s[2:]
+        if not s:
+            return -1, "Empty ASN string"
+        if "." in s:
+            parts = s.split(".")
+            if len(parts) != 2:
+                return -1, "Invalid asdot syntax"
+            try:
+                high = int(parts[0])
+                low = int(parts[1])
+            except ValueError:
+                return -1, "Invalid asdot integer values"
+            if high < 0 or high > 65535 or low < 0 or low > 65535:
+                return -1, "asdot parts out of 16-bit range (0-65535)"
+            return (high << 16) | low, ""
+        try:
+            val = int(s)
+        except ValueError:
+            return -1, "Invalid ASN syntax"
+        if val < 0 or val > 4294967295:
+            return -1, "ASN out of 32-bit range (0-4294967295)"
+        return val, ""
+
+    return -1, "Invalid ASN type"
+
+
+def check_asn(asn: Union[int, str]) -> Tuple[bool, str]:
     """
     Checks whether an ASN is valid and publicly routable.
+    Accepts int or str (e.g. 15169, 'AS15169', '1.0').
     Returns (True, "") if valid, or (False, reason) if reserved or a bogon.
     """
-    if not isinstance(asn, int) or isinstance(asn, bool):
-        return False, "ASN must be an integer"
-    if asn < 0 or asn > 4294967295:
-        return False, "ASN out of 32-bit range (0-4294967295)"
+    num, err = parse_asn(asn)
+    if err:
+        return False, err
 
     for start, end, reason in AS_RULES:
-        if start <= asn <= end:
+        if start <= num <= end:
             return False, reason
     return True, ""
 
 
-def valid_public_asn(asn: int) -> bool:
+def valid_public_asn(asn: Union[int, str]) -> bool:
     """
     Checks whether an ASN is valid and publicly routable.
-    Convenience/backward-compatible boolean wrapper around check_asn.
+    Accepts int or str. Backward-compatible boolean wrapper around check_asn.
     """
     valid, _ = check_asn(asn)
     return valid
